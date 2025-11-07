@@ -1,8 +1,8 @@
-## SA1: Skills Portfolio – Assessment 1
-**Module:** DC-BSU-RAK CodeLab II (2025)
-**University:** Bath Spa University
-**Certifications:** [Python GUI Certificate](Certificates/PythonGUI.png) and [Python Intermediate Certificate](Certificates/PythonIntermediate.png)
-**Deadline:** 27 November 2025
+## SA1: Skills Portfolio – Assessment 1  
+**Module:** DC-BSU-RAK CodeLab II (2025)  
+**University:** Bath Spa University  
+**Certifications:** [Python GUI Certificate](Certificates/PythonGUI.png) and [Python Intermediate Certificate](Certificates/PythonIntermediate.png)  
+**Deadline:** 27 November 2025  
 
 ---
 
