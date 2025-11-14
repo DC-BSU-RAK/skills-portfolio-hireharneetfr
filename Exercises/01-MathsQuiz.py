@@ -54,8 +54,8 @@ class MathsQuizApp:
 
         try:
             original_image = Image.open("Resources\images\start.png")
-            self.background_photo = ImageTk.PhotoImage(original_image)
-            
+            resized_image = original_image.resize((600, 400), Image.Resampling.LANCZOS)
+            self.background_photo = ImageTk.PhotoImage(resized_image)
             background_label = tk.Label(frame, image=self.background_photo)
             background_label.place(x=0, y=0, relwidth=1, relheight=1)
         except FileNotFoundError:
