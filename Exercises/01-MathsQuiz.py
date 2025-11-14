@@ -64,14 +64,14 @@ class MathsQuizApp:
         tk.Button(frame, 
                   text="START", 
                   command=lambda: self._show_frame("menu"),
-                  bg="#FCE2E6",
-                  fg="#FFC0CB",
-                  font=("Roboto", 24, "bold"),
+                  fg="#FFFFFF",
+                  bg="#ffa9c2",
+                  activebackground="#ffa9c2",
+                  font=("Roboto", 16, "bold"),
                   relief=tk.FLAT,
                   bd=0,
                   highlightthickness=0,
-                  width=7,
-                 ).place(relx=0.5, rely=0.67, anchor=tk.CENTER) 
+                 ).place(relx=0.5, rely=0.74, anchor=tk.CENTER) 
 
         return frame
 
