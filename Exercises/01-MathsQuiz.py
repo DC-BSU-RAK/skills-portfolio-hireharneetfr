@@ -3,6 +3,8 @@ import tkinter.messagebox as msgbox
 import sys
 import random
 
+from PIL import Image, ImageTK
+
 EASY_RANGE = (1, 9)
 MODERATE_RANGE = (10, 99)
 ADVANCED_RANGE = (1000, 9999)
@@ -11,9 +13,9 @@ class MathsQuizApp:
     def __init__(self, master):
         self.master = master
         self.master.title("01- Maths Quiz!")
-        self.master.geometry("450x300")
+        self.master.geometry("600x400")
         self.master.resizable(False, False)
-        self.master.configure(bg="#000000")
+        self.master.configure(bg="#FCE2E6")
 
         self.difficulty_level = None
         self.current_question = 0
@@ -30,19 +32,49 @@ class MathsQuizApp:
         self.user_answer = tk.StringVar()
 
         self.frames = {}
+        self.frames["start"] = self._create_start_page()
         self.frames["menu"] = self._create_menu_frame()
         self.frames["quiz"] = self._create_quiz_frame()
-        self._show_frame("menu")
+        
+        self._show_frame("start")    
 
     def _show_frame(self, page_name):
         frame = self.frames[page_name]
         frame.tkraise()
 
+        def _create_start_page(self):
+            frame = tk.Frame(self.master, bg="#FCE2E6") 
+            frame.place(x=0, y=0, relwidth=1, relheight=1)
+            
+            try:
+                 original_image = Image.open("START.png")
+                 resized_image = original_image.resize((600, 400), Image.Resampling.LANCZOS)
+                 self.background_photo = ImageTk.PhotoImage(resized_image)
+                 background_label = tk.Label(frame, image=self.background_photo)
+                 background_label.place(x=0, y=0, relwidth=1, relheight=1)
+                 except FileNotFoundError:
+                 tk.Label(frame, text="MATH QUIZ - Image Not Found", bg="#FCE2E6", fg="#FF0073", font=("Roboto", 30, "bold")).place(relx=0.5, rely=0.4, anchor=tk.CENTER)
+                 
+                 tk.Button(
+                     frame,
+                     text="START",
+                     command=lambda: self._show_frame("menu"),
+                     bg="#FCE2E6",
+                     fg="#FFC0CB",
+                     font=("Roboto", 24, "bold"),
+                     relief=tk.FLAT,
+                     bd=0,
+                     highlightthickness=0,
+                     width=7
+                     ).place(relx=0.5, rely=0.67, anchor=tk.CENTER)
+
+        return frame
+
     def _create_menu_frame(self):
-        frame = tk.Frame(self.master, bg="#000000")
+        frame = tk.Frame(self.master, bg="#FCE2E6")
         frame.place(x=0, y=0, relwidth=1, relheight=1)
 
-        tk.Label(frame, text="DIFFICULTY LEVEL", bg="#000000", fg="white", font=("Roboto", 16, "bold")).pack(pady=20)
+        tk.Label(frame, text="DIFFICULTY LEVEL", bg="#000000", fg="black", font=("Roboto", 18, "bold")).pack(pady=20)
 
         tk.Button(frame, text="1. Easy (Single Digit)", command=lambda: self._start_quiz('easy'), bg="#FF4397", fg="black", font=("Roboto", 12)).pack(pady=5, ipadx=10)
         tk.Button(frame, text="2. Moderate (Double Digit)", command=lambda: self._start_quiz('moderate'), bg="#FF0073", fg="black", font=("Roboto", 12)).pack(pady=5, ipadx=10)
