@@ -1,56 +1,48 @@
-import tkinter as tk
-import tkinter.messagebox as msgbox
-import sys
-import random
-from PIL import Image, ImageTk
+import tkinter as tk #importing tkinkter
+import tkinter.messagebox as msgbox #message boxes
+import random #for random numbers
+from PIL import Image, ImageTk #for importing images 
 
-EASY_RANGE = (1, 9)
-MODERATE_RANGE = (10, 99)
-ADVANCED_RANGE = (1000, 9999)
+EASY_RANGE = (1, 9) #choosing the range for the easy level
+MODERATE_RANGE = (10, 99) #choosing the range for moderate level
+ADVANCED_RANGE = (1000, 9999) #choosing the range for advanced level 
 
-class MathsQuizApp:
+class MathsQuizApp: #class being made 
     def __init__(self, master):
         self.master = master
-        self.master.title("01- Maths Quiz!")
-        self.master.geometry("600x400")
-        self.master.resizable(False, False)
-        self.master.configure(bg="#FCE2E6")
+        self.master.title("01- Maths Quiz!") #the title of the window
+        self.master.geometry("600x400") #the size of the window
+        self.master.resizable(False, False) #window is non resizeable 
+        self.master.configure(bg="#FCE2E6") #the color for the window
 
-        self.difficulty_level = None
-        self.current_question = 0
-        self.score = 0
-        self.current_answer = None
-        self.chances_left = 2
-        self.current_num1 = 0
-        self.current_num2 = 0
-        self.current_operation = ''
+        self.difficulty_level = None #to track the chosen difficulty 
+        self.current_question = 0 #the counter of the questions
+        self.score = 0 #tracks the score
+        self.current_answer = None #to store the answer
+        self.chances_left = 2 #chances per question 
+        self.current_num1 = 0 #number 1 in question
+        self.current_num2 = 0 #number 2 in question
+        self.current_operation = '' # chooses + or - 
 
-        self.question_text = tk.StringVar(master, value="Select Difficulty Level")
-        self.score_text = tk.StringVar(master, value="Score: 0")
-        self.user_answer = tk.StringVar()
-        self.feedback_text = tk.StringVar(master, value="")
+        self.question_text = tk.StringVar(master, value="Select Difficulty Level")  
+        self.score_text = tk.StringVar(master, value="Score: 0") #displays the score
+        self.user_answer = tk.StringVar() #input binding 
+        self.feedback_text = tk.StringVar(master, value="") #for feedback text
 
-        self.frames = {}
-        self.frames["start"] = self._create_start_page()
-        self.frames["menu"] = self._create_menu_frame()
-        self.frames["quiz"] = self._create_quiz_frame()
+        self.frames = {} #using dictionary of frames
+        self.frames["start"] = self._create_start_page() #start page frame
+        self.frames["menu"] = self._create_menu_frame() #menu page frame 
+        self.frames["quiz"] = self._create_quiz_frame() #quiz page frame
         
-        self._show_frame("start")    
+        self._show_frame("start") #to show the start page first
 
-        self.frames = {}
-        self.frames["start"] = self._create_start_page()
-        self.frames["menu"] = self._create_menu_frame()
-        self.frames["quiz"] = self._create_quiz_frame()
-        
-        self._show_frame("start")
+    def _show_frame(self, page_name): #to help switch pages
+        frame = self.frames[page_name] #to get frame from dictionary
+        frame.tkraise() #frame comes on top
 
-    def _show_frame(self, page_name):
-        frame = self.frames[page_name]
-        frame.tkraise()
-
-    def _create_start_page(self):
-        frame = tk.Frame(self.master, bg="#FCE2E6") 
-        frame.place(x=0, y=0, relwidth=1, relheight=1)
+    def _create_start_page(self): #start screen
+        frame = tk.Frame(self.master, bg="#FCE2E6") #creates frame with the color
+        frame.place(x=0, y=0, relwidth=1, relheight=1) #to place the frame and cover the window
 
         try:
             original_image = Image.open("Resources\images\start.png")
