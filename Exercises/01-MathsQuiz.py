@@ -135,21 +135,27 @@ class MathsQuizApp: #class being made
 
         tk.Label(frame, textvariable=self.question_text, #the question text is shown
                  bg="#fff8f3", fg="#D42470", #label background and the text colour
-                 font=("Roboto", 26, "bold")).place(relx=0.43, rely=0.34, anchor="center") #position of question label
+                 font=("Roboto", 26, "bold")).place(relx=0.43, rely=0.32, anchor="center") #position of question label
 
         tk.Entry(frame, textvariable=self.user_answer, #entry to user_answer variable
                  width=10, font=("Roboto", 20), #width of entry box, font
-                 justify="center").place(relx=0.43, rely=0.47, anchor="center") #text in centre and psoition of answer entry
+                 justify="center").place(relx=0.43, rely=0.43, anchor="center") #text in centre and psoition of answer entry
 
         tk.Button(frame, text="Submit", command=self._submit_answer, #text on button, calls function to check the answer
                   bg="#FF69A6", fg="white", activebackground="#FF8ABA", #button background, text color, button color when clciked
                   font=("Roboto", 14, "bold"), relief=tk.FLAT, bd=0, #font style, flat button, no border
-                  padx=20, pady=6, cursor="hand2").place(relx=0.43, rely=0.61, anchor="center") #horizontal, vertical padding anc hand on hover + position of the button
+                  padx=20, pady=6, cursor="hand2").place(relx=0.43, rely=0.57, anchor="center") #horizontal, vertical padding anc hand on hover + position of the button
 
         tk.Label(frame, textvariable=self.score_text, #shows current score
                  bg="#fff8f3", fg="#2e1940", #text and background color
-                 font=("Roboto", 14, "bold")).place(relx=0.43, rely=0.73, anchor="center") #font for score and position of label
- 
+                 font=("Roboto", 14, "bold")).place(relx=0.43, rely=0.69, anchor="center") #font for score and position of label
+        
+        tk.Label(
+            frame,textvariable=self.feedback_text, #feedback text like incorrect or correct
+            bg="#fff8f3", fg="#D42470",  #background and text color
+            font=("Roboto", 12, "bold") #font
+        ).place(relx=0.43, rely=0.78, anchor="center") #position of the button
+
         return frame #returns frame
     
     def _start_quiz(self, difficulty): #game starts with the chosen difficulty
@@ -176,82 +182,82 @@ class MathsQuizApp: #class being made
     def _decide_operation(self): #decides which math operation to use
         return random.choice(['+', '-']) #chooses between + or -
 
-    def _display_problem(self):
-        self.current_num1 = self._random_int()
-        self.current_num2 = self._random_int()
-        self.current_operation = self._decide_operation()
+    def _display_problem(self): #creates and shows a new question
+        self.current_num1 = self._random_int() #get first random number 
+        self.current_num2 = self._random_int() #get second random number
+        self.current_operation = self._decide_operation() #chooses between + or -
 
-        if self.current_operation == '-' and self.current_num2 > self.current_num1:
-            self.current_num1, self.current_num2 = self.current_num2, self.current_num1
+        if self.current_operation == '-' and self.current_num2 > self.current_num1: #if subtraction would go negative
+            self.current_num1, self.current_num2 = self.current_num2, self.current_num1 #swap so result stays positive
 
-        if self.current_operation == '+':
-            self.current_answer = self.current_num1 + self.current_num2
+        if self.current_operation == '+': #if operation is addition
+            self.current_answer = self.current_num1 + self.current_num2 #calculate answer for +
         else:
-            self.current_answer = self.current_num1 - self.current_num2
+            self.current_answer = self.current_num1 - self.current_num2 #calculate answer for -
 
-        self.question_text.set(f"{self.current_num1} {self.current_operation} {self.current_num2} = ?")
-        self.user_answer.set("")
-        self.chances_left = 2
+        self.question_text.set(f"{self.current_num1} {self.current_operation} {self.current_num2} = ?") #updates the label to show the question
+        self.user_answer.set("") #clears previous input from entry
+        self.chances_left = 2  #resets the chances back to 2 for new question
 
-    def _submit_answer(self):
-        text = self.user_answer.get()
-        if not text:
+    def _submit_answer(self): #checks the answer
+        text = self.user_answer.get() #get text typed 
+        if not text: #if nothign is entered below is shown
             self.feedback_text.set("Please enter an answer.")
-            return
+            return #exits 
 
         try:
-            guess = int(text)
+            guess = int(text) #try converting input to an integer
         except ValueError:
-            self.feedback_text.set("Invalid input. Enter a number.")
-            return
+            self.feedback_text.set("Invalid input. Enter a number.") #error if not a number
+            return #exit function if invalid
 
-        if guess == self.current_answer:
-            self._mark_correct()
+        if guess == self.current_answer: #if user got correct answer
+            self._mark_correct() #call function to handle correct answer
         else:
-            self._mark_incorrect()
+            self._mark_incorrect() #call function to handle wrong answer
 
-    def _mark_correct(self):
-        points = 10 if self.chances_left == 2 else 5
-        self.score += points
-        self.score_text.set(f"Score: {self.score}")
-        self.feedback_text.set(f"Correct! (+{points} points)")
-        self._next_problem()
+    def _mark_correct(self):  #handles correct answers
+        points = 10 if self.chances_left == 2 else 5 #10 points if correct answer on first try orelse 5 points
+        self.score += points #add points to score
+        self.score_text.set(f"Score: {self.score}") #update score label
+        self.feedback_text.set(f"Correct! (+{points} points)") #feedback saying answer is correct
+        self._next_problem() #go to next question
 
-    def _mark_incorrect(self):
-        self.chances_left -= 1
-        if self.chances_left >= 1:
-            self.feedback_text.set(f"Wrong answer. {self.chances_left} chance left.")
+    def _mark_incorrect(self): #handles the wrong answers
+        self.chances_left -= 1  #reduces chances by 1
+        if self.chances_left >= 1: #if 1 chance is left brlow is shown
+            self.feedback_text.set(f"Wrong answer. {self.chances_left} chance left.") # chance left 1 is shown
         else:
-            self.feedback_text.set(f"Wrong. Answer was {self.current_answer}.")
-            self._next_problem()
+            self.feedback_text.set(f"Wrong. Answer was {self.current_answer}.") #shows the correct answer
+            self._next_problem() #goes to the next wuestion
 
-    def _next_problem(self):
-        self.current_question += 1
-        if self.current_question > 10:
-            self._finish_quiz()
+    def _next_problem(self): #to move to the next problem
+        self.current_question += 1 #increase the question count by 1
+        if self.current_question > 10: #to ask 10 questions
+            self._finish_quiz() #finish it there and show results
         else:
-            self._display_problem()
+            self._display_problem() #orelse more questions
 
-    def _finish_quiz(self):
-        rank = "C"
-        if self.score > 90:
+    def _finish_quiz(self): #what diaplays when the quiz ends
+        rank = "C" #default rank
+        if self.score > 90: #rank a+ is shown if scored points are more thn 90 
             rank = "A+"
-        elif self.score > 70:
+        elif self.score > 70: #rank a is shown if scored more thn 70
             rank = "A"
-        elif self.score > 50:
+        elif self.score > 50: #rank b is shown is scored more thn 50
             rank = "B"
 
-        msg = f"Quiz Finished!\nScore: {self.score}/100\nRank: {rank}"
-        msgbox.showinfo("Quiz Results", msg)
+        msg = f"Quiz Finished!\nScore: {self.score}/100\nRank: {rank}" #final message 
+        msgbox.showinfo("Quiz Results", msg) #the popup showning the score and rank
 
-        if msgbox.askyesno("Play Again?", "Play another quiz?"):
-            self._show_frame("menu")
-            self.question_text.set("Select Difficulty Level")
-            self.feedback_text.set("Welcome to the Maths Quiz!")
+        if msgbox.askyesno("Play Again?", "Play another quiz?"): #asks the user if they want to play again
+            self._show_frame("menu") #takes back to menu
+            self.question_text.set("Select Difficulty Level") #resets the question text
+            self.feedback_text.set("Welcome to the Maths Quiz!") #and also the feedback text
         else:
-            self.master.quit()
+            self.master.quit() #closes the window if user says no to playing again
 
-if __name__ == '__main__':
-    root = tk.Tk()
-    app = MathsQuizApp(root)
-    root.mainloop()
+if __name__ == '__main__': #checks if the file is run directly
+    root = tk.Tk() #creates the main window
+    app = MathsQuizApp(root) #creates an instance of the class
+    root.mainloop() #keeps the window open 
