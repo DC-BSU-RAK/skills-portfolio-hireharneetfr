@@ -26,9 +26,9 @@ class MathsQuizApp:
         self.current_operation = ''
 
         self.question_text = tk.StringVar(master, value="Select Difficulty Level")
-        self.feedback_text = tk.StringVar(master, value="Welcome to the Maths Quiz!")
         self.score_text = tk.StringVar(master, value="Score: 0")
         self.user_answer = tk.StringVar()
+        self.feedback_text = tk.StringVar(master, value="")
 
         self.frames = {}
         self.frames["start"] = self._create_start_page()
@@ -122,20 +122,44 @@ class MathsQuizApp:
         ).place(relx=0.79, rely=0.7, anchor=tk.CENTER)
         
         return frame
-
+    
     def _create_quiz_frame(self):
-        frame = tk.Frame(self.master, bg="#000000")
+        frame = tk.Frame(self.master, bg="#FCE2E6")
         frame.place(x=0, y=0, relwidth=1, relheight=1)
 
-        tk.Label(frame, textvariable=self.question_text, bg="#000000", fg="#FFD700", font=("Roboto", 20, "bold")).place(relx=0.5, rely=0.2, anchor=tk.CENTER)
-        tk.Entry(frame, textvariable=self.user_answer, width=10, font=("Roboto", 18)).place(relx=0.5, rely=0.35, anchor=tk.CENTER)
-        tk.Button(frame, text="Submit Answer", command=self._submit_answer, bg="#FF4397", fg="black", font=("Roboto", 14)).place(relx=0.5, rely=0.55, anchor=tk.CENTER)
-        tk.Label(frame, textvariable=self.score_text, bg="#000000", fg="white", font=("Roboto", 12)).place(relx=0.5, rely=0.7, anchor=tk.CENTER)
-        tk.Label(frame, textvariable=self.feedback_text, bg="#000000", fg="#FFF8DC", font=("Roboto", 10)).place(relx=0.5, rely=0.8, anchor=tk.CENTER)
-        tk.Button(frame, text="Back to Menu", command=lambda: self._show_frame("menu"), bg="#444444", fg="white", font=("Roboto", 10)).place(relx=0.5, rely=0.9, anchor=tk.CENTER)
+        try:
+            original_image = Image.open("Resources/images/QUIZ.png")
+            resized_image = original_image.resize((600, 400), Image.Resampling.LANCZOS)
+            self.quiz_bg = ImageTk.PhotoImage(resized_image)
+            background_label = tk.Label(frame, image=self.quiz_bg)
+            background_label.place(x=0, y=0, relwidth=1, relheight=1)
+        except:
+            frame.configure(bg="#FCE2E6")
+
+        tk.Button(frame, text="Back", command=lambda: self._show_frame("menu"),
+                  bg="#fff", fg="#333", font=("Roboto", 9, "bold"),
+                  relief=tk.FLAT, bd=0, highlightthickness=0, cursor="hand2",
+                  padx=6, pady=2).place(relx=0.05, rely=0.08, anchor="w")
+
+        tk.Label(frame, textvariable=self.question_text,
+                 bg="#000000", fg="#D42470",
+                 font=("Roboto", 26, "bold")).place(relx=0.5, rely=0.28, anchor="center")
+
+        tk.Entry(frame, textvariable=self.user_answer,
+                 width=10, font=("Roboto", 20),
+                 justify="center").place(relx=0.5, rely=0.43, anchor="center")
+
+        tk.Button(frame, text="Submit", command=self._submit_answer,
+                  bg="#FF69A6", fg="white", activebackground="#FF8ABA",
+                  font=("Roboto", 14, "bold"), relief=tk.FLAT, bd=0,
+                  padx=20, pady=6, cursor="hand2").place(relx=0.5, rely=0.56, anchor="center")
+
+        tk.Label(frame, textvariable=self.score_text,
+                 bg="#ffffff", fg="#4A145A",
+                 font=("Roboto", 14, "bold")).place(relx=0.5, rely=0.90, anchor="center")
 
         return frame
-
+    
     def _start_quiz(self, difficulty):
         self.difficulty_level = difficulty
         self._reset_quiz()
@@ -183,6 +207,7 @@ class MathsQuizApp:
         if not text:
             self.feedback_text.set("Please enter an answer.")
             return
+
         try:
             guess = int(text)
         except ValueError:
@@ -193,13 +218,6 @@ class MathsQuizApp:
             self._mark_correct()
         else:
             self._mark_incorrect()
-
-    def _mark_correct(self):
-        points = 10 if self.chances_left == 2 else 5
-        self.score += points
-        self.score_text.set(f"Score: {self.score}")
-        self.feedback_text.set(f"Correct! (+{points} points)")
-        self._next_problem()
 
     def _mark_incorrect(self):
         self.chances_left -= 1
