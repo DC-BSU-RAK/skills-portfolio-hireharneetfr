@@ -45,137 +45,136 @@ class MathsQuizApp: #class being made
         frame.place(x=0, y=0, relwidth=1, relheight=1) #to place the frame and cover the window
 
         try:
-            original_image = Image.open("Resources\images\start.png")
-            resized_image = original_image.resize((600, 400), Image.Resampling.LANCZOS)
-            self.background_photo = ImageTk.PhotoImage(resized_image)
-            background_label = tk.Label(frame, image=self.background_photo)
-            background_label.place(x=0, y=0, relwidth=1, relheight=1)
-        except FileNotFoundError:
+            original_image = Image.open("Resources\images\start.png") #uploaded the image in the back
+            resized_image = original_image.resize((600, 400), Image.Resampling.LANCZOS) #resizes the image to fit the window
+            self.background_photo = ImageTk.PhotoImage(resized_image) #to convert the image for tkinter
+            background_label = tk.Label(frame, image=self.background_photo) #label to show the background image
+            background_label.place(x=0, y=0, relwidth=1, relheight=1) #place of the bg image
+        except FileNotFoundError: #if the image is not found the below is displayed on the screen
             tk.Label(frame, text="MATH QUIZ - Image Not Found", bg="#FCE2E6", fg="#FF0073", font=("Roboto", 30, "bold")).place(relx=0.5, rely=0.4, anchor=tk.CENTER)
             
         tk.Button(frame, 
-                  text="START", 
-                  command=lambda: self._show_frame("menu"),
-                  fg="#FFFFFF",
-                  bg="#ffa9c2",
-                  activebackground="#ffa9c2",
-                  font=("Roboto", 16, "bold"),
-                  relief=tk.FLAT,
-                  bd=0,
-                  highlightthickness=0,
-                 ).place(relx=0.5, rely=0.74, anchor=tk.CENTER) 
+                  text="START", #the text on button 
+                  command=lambda: self._show_frame("menu"), #when clciked takes to menu
+                  fg="#FFFFFF", #text color
+                  bg="#ffa9c2", # background color
+                  activebackground="#ffa9c2", #colod when clicked
+                  font=("Roboto", 16, "bold"), #font size
+                  relief=tk.FLAT, #flat button
+                  bd=0, #no borders
+                  highlightthickness=0, #no highlight borders
+                 ).place(relx=0.5, rely=0.74, anchor=tk.CENTER) #the position of the button
 
-        return frame
+        return frame #returns the start frame
 
-    def _create_menu_frame(self):
-        frame = tk.Frame(self.master, bg="#FCE2E6")
-        frame.place(x=0, y=0, relwidth=1, relheight=1)
+    def _create_menu_frame(self): #creates the menu page
+        frame = tk.Frame(self.master, bg="#FCE2E6") #background color and frame
+        frame.place(x=0, y=0, relwidth=1, relheight=1) #covers the entire window
         
         try:
-            original_image = Image.open("Resources\images\MENU.png") 
-            resized_image = original_image.resize((600, 400), Image.Resampling.LANCZOS)
-            self.menu_background_photo = ImageTk.PhotoImage(resized_image)
-            background_label = tk.Label(frame, image=self.menu_background_photo)
-            background_label.place(x=0, y=0, relwidth=1, relheight=1)
-        except FileNotFoundError:
+            original_image = Image.open("Resources\images\MENU.png") #loads the image
+            resized_image = original_image.resize((600, 400), Image.Resampling.LANCZOS) #resizes to fit window
+            self.menu_background_photo = ImageTk.PhotoImage(resized_image) #converts to tkinter
+            background_label = tk.Label(frame, image=self.menu_background_photo) #label with image
+            background_label.place(x=0, y=0, relwidth=1, relheight=1) #places background image
+        except FileNotFoundError: #if the image is not found the below is displayed on the screen
             tk.Label(frame, text="CHOOSE DIFFICULTY - Image Not Found", bg="#FCE2E6", fg="#FF0073", font=("Roboto", 30, "bold")).pack(pady=(40, 30))
             
         button_style = {
-                "bg": "#fff8f3",           
-                "activebackground": "#fff8f3",
-                "fg": "#2e1940",
-                "activeforeground": "#2e1940",
-                "font": ("Roboto", 9, "bold"),
-                "relief": tk.FLAT,
-                "bd": 0,
-                "highlightthickness": 0,
-                "cursor": "hand2",
+                "bg": "#fff8f3",    #background color       
+                "activebackground": "#fff8f3", #button color when clciked
+                "fg": "#2e1940", #text color
+                "activeforeground": "#2e1940", #text color when clicked
+                "font": ("Roboto", 9, "bold"), #font
+                "relief": tk.FLAT, #flat vbutton
+                "bd": 0, #no border
+                "highlightthickness": 0, #no highliught border
+                "cursor": "hand2", #cursor changes to hand
                 }
         
-        tk.Button(
+        tk.Button( 
             frame,
-            text="EASY",
+            text="EASY", #text on the button
             command=lambda: self._start_quiz('easy'),
             **button_style
-        ).place(relx=0.21, rely=0.7, anchor=tk.CENTER)
+        ).place(relx=0.21, rely=0.7, anchor=tk.CENTER) #position of the button
 
         tk.Button(
             frame,
-            text="MODERATE",
+            text="MODERATE", #text on the button
             command=lambda: self._start_quiz('moderate'),
             **button_style
-        ).place(relx=0.50, rely=0.7, anchor=tk.CENTER)
+        ).place(relx=0.50, rely=0.7, anchor=tk.CENTER) #position of the button
 
         tk.Button(
             frame,
-            text="ADVANCED",
+            text="ADVANCED", #text on the button
             command=lambda: self._start_quiz('advanced'),
             **button_style
-        ).place(relx=0.79, rely=0.7, anchor=tk.CENTER)
+        ).place(relx=0.79, rely=0.7, anchor=tk.CENTER) #position of the button
         
-        return frame
+        return frame #returns menu page
     
-    def _create_quiz_frame(self):
-        frame = tk.Frame(self.master, bg="#FCE2E6")
-        frame.place(x=0, y=0, relwidth=1, relheight=1)
+    def _create_quiz_frame(self): #creates quuiz page
+        frame = tk.Frame(self.master, bg="#FCE2E6") #frame of the quix with background color
+        frame.place(x=0, y=0, relwidth=1, relheight=1) #covers the whole window
 
         try:
-            original_image = Image.open("Resources/images/QUIZ.png")
-            resized_image = original_image.resize((600, 400), Image.Resampling.LANCZOS)
-            self.quiz_bg = ImageTk.PhotoImage(resized_image)
-            background_label = tk.Label(frame, image=self.quiz_bg)
-            background_label.place(x=0, y=0, relwidth=1, relheight=1)
-        except:
+            original_image = Image.open("Resources/images/QUIZ.png") #loads the image
+            resized_image = original_image.resize((600, 400), Image.Resampling.LANCZOS) #resizes the image to fit the window
+            self.quiz_bg = ImageTk.PhotoImage(resized_image) #converts the image to tkinter
+            background_label = tk.Label(frame, image=self.quiz_bg) #label to show the background
+            background_label.place(x=0, y=0, relwidth=1, relheight=1) #places the image in frame
+        except: #if the image is not found the below is displayed on the screen
             frame.configure(bg="#FCE2E6")
 
-        tk.Button(frame, text="Back", command=lambda: self._show_frame("menu"),
-                  bg="#fff", fg="#333", font=("Roboto", 9, "bold"),
-                  relief=tk.FLAT, bd=0, highlightthickness=0, cursor="hand2",
-                  padx=6, pady=2).place(relx=0.05, rely=0.08, anchor="w")
+        tk.Button(frame, text="Back", command=lambda: self._show_frame("menu"), #button for menu, when pressed shows menu
+                  bg="#fff", fg="#333", font=("Roboto", 9, "bold"), #button background, text colour
+                  relief=tk.FLAT, bd=0, highlightthickness=0, cursor="hand2", # flat button, no border, no highlight border and hand cursor
+                  padx=6, pady=2).place(relx=0.05, rely=0.08, anchor="w") #horizontal and veritical padding with placement of button
 
-        tk.Label(frame, textvariable=self.question_text,
-                 bg="#fff8f3", fg="#D42470",
-                 font=("Roboto", 26, "bold")).place(relx=0.43, rely=0.34, anchor="center")
+        tk.Label(frame, textvariable=self.question_text, #the question text is shown
+                 bg="#fff8f3", fg="#D42470", #label background and the text colour
+                 font=("Roboto", 26, "bold")).place(relx=0.43, rely=0.34, anchor="center") #position of question label
 
-        tk.Entry(frame, textvariable=self.user_answer,
-                 width=10, font=("Roboto", 20),
-                 justify="center").place(relx=0.43, rely=0.47, anchor="center")
+        tk.Entry(frame, textvariable=self.user_answer, #entry to user_answer variable
+                 width=10, font=("Roboto", 20), #width of entry box, font
+                 justify="center").place(relx=0.43, rely=0.47, anchor="center") #text in centre and psoition of answer entry
 
-        tk.Button(frame, text="Submit", command=self._submit_answer,
-                  bg="#FF69A6", fg="white", activebackground="#FF8ABA",
-                  font=("Roboto", 14, "bold"), relief=tk.FLAT, bd=0,
-                  padx=20, pady=6, cursor="hand2").place(relx=0.43, rely=0.61, anchor="center")
+        tk.Button(frame, text="Submit", command=self._submit_answer, #text on button, calls function to check the answer
+                  bg="#FF69A6", fg="white", activebackground="#FF8ABA", #button background, text color, button color when clciked
+                  font=("Roboto", 14, "bold"), relief=tk.FLAT, bd=0, #font style, flat button, no border
+                  padx=20, pady=6, cursor="hand2").place(relx=0.43, rely=0.61, anchor="center") #horizontal, vertical padding anc hand on hover + position of the button
 
-        tk.Label(frame, textvariable=self.score_text,
-                 bg="#fff8f3", fg="#2e1940",
-                 font=("Roboto", 14, "bold")).place(relx=0.43, rely=0.73, anchor="center")
-
-        return frame
+        tk.Label(frame, textvariable=self.score_text, #shows current score
+                 bg="#fff8f3", fg="#2e1940", #text and background color
+                 font=("Roboto", 14, "bold")).place(relx=0.43, rely=0.73, anchor="center") #font for score and position of label
+ 
+        return frame #returns frame
     
-    def _start_quiz(self, difficulty):
-        self.difficulty_level = difficulty
-        self._reset_quiz()
-        self._show_frame("quiz")
-        self._next_problem()
+    def _start_quiz(self, difficulty): #game starts with the chosen difficulty
+        self.difficulty_level = difficulty #stores the choise
+        self._reset_quiz() #resets the score and querstions
+        self._show_frame("quiz") #switches to quiz page
+        self._next_problem() #load the first question 
 
-    def _reset_quiz(self):
-        self.current_question = 0
-        self.score = 0
-        self.score_text.set("Score: 0")
-        self.feedback_text.set("Quiz started! Good luck.")
-        self.user_answer.set("")
+    def _reset_quiz(self): #resets the quiz values
+        self.current_question = 0 #resets the question counter
+        self.score = 0 #resets the score
+        self.score_text.set("Score: 0") #updates the score label 
+        self.user_answer.set("") #clear the old answer 
 
-    def _random_int(self):
-        if self.difficulty_level == 'easy':
-            min_val, max_val = EASY_RANGE
-        elif self.difficulty_level == 'moderate':
-            min_val, max_val = MODERATE_RANGE
+    def _random_int(self): #gets random number based on difficulty
+        if self.difficulty_level == 'easy': #if easy selected
+            min_val, max_val = EASY_RANGE #if easy selected
+        elif self.difficulty_level == 'moderate': #if moderate selected
+            min_val, max_val = MODERATE_RANGE #use moderate range
         else:
-            min_val, max_val = ADVANCED_RANGE
-        return random.randint(min_val, max_val)
+            min_val, max_val = ADVANCED_RANGE #otherwise use advanced range
+        return random.randint(min_val, max_val) #return random number between min and max
 
-    def _decide_operation(self):
-        return random.choice(['+', '-'])
+    def _decide_operation(self): #decides which math operation to use
+        return random.choice(['+', '-']) #chooses between + or -
 
     def _display_problem(self):
         self.current_num1 = self._random_int()
