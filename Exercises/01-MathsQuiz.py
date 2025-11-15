@@ -219,6 +219,13 @@ class MathsQuizApp:
         else:
             self._mark_incorrect()
 
+    def _mark_correct(self):
+        points = 10 if self.chances_left == 2 else 5
+        self.score += points
+        self.score_text.set(f"Score: {self.score}")
+        self.feedback_text.set(f"Correct! (+{points} points)")
+        self._next_problem()
+
     def _mark_incorrect(self):
         self.chances_left -= 1
         if self.chances_left >= 1:
