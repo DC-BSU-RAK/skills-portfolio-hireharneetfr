@@ -78,13 +78,49 @@ class MathsQuizApp:
     def _create_menu_frame(self):
         frame = tk.Frame(self.master, bg="#FCE2E6")
         frame.place(x=0, y=0, relwidth=1, relheight=1)
+        
+        try:
+            original_image = Image.open("Resources\images\MENU.png") 
+            resized_image = original_image.resize((600, 400), Image.Resampling.LANCZOS)
+            self.menu_background_photo = ImageTk.PhotoImage(resized_image)
+            background_label = tk.Label(frame, image=self.menu_background_photo)
+            background_label.place(x=0, y=0, relwidth=1, relheight=1)
+        except FileNotFoundError:
+            tk.Label(frame, text="CHOOSE DIFFICULTY - Image Not Found", bg="#FCE2E6", fg="#FF0073", font=("Roboto", 30, "bold")).pack(pady=(40, 30))
+            
+        button_style = {
+                "bg": "#fff8f3",           
+                "activebackground": "#fff8f3",
+                "fg": "#2e1940",
+                "activeforeground": "#2e1940",
+                "font": ("Roboto", 9, "bold"),
+                "relief": tk.FLAT,
+                "bd": 0,
+                "highlightthickness": 0,
+                "cursor": "hand2",
+                }
+        
+        tk.Button(
+            frame,
+            text="EASY",
+            command=lambda: self._start_quiz('easy'),
+            **button_style
+        ).place(relx=0.21, rely=0.7, anchor=tk.CENTER)
 
-        tk.Label(frame, text="DIFFICULTY LEVEL", bg="#000000", fg="black", font=("Roboto", 18, "bold")).pack(pady=20)
+        tk.Button(
+            frame,
+            text="MODERATE",
+            command=lambda: self._start_quiz('moderate'),
+            **button_style
+        ).place(relx=0.50, rely=0.7, anchor=tk.CENTER)
 
-        tk.Button(frame, text="1. Easy (Single Digit)", command=lambda: self._start_quiz('easy'), bg="#FF4397", fg="black", font=("Roboto", 12)).pack(pady=5, ipadx=10)
-        tk.Button(frame, text="2. Moderate (Double Digit)", command=lambda: self._start_quiz('moderate'), bg="#FF0073", fg="black", font=("Roboto", 12)).pack(pady=5, ipadx=10)
-        tk.Button(frame, text="3. Advanced (4-Digit)", command=lambda: self._start_quiz('advanced'), bg="#F6197C", fg="black", font=("Roboto", 12)).pack(pady=5, ipadx=10)
-
+        tk.Button(
+            frame,
+            text="ADVANCED",
+            command=lambda: self._start_quiz('advanced'),
+            **button_style
+        ).place(relx=0.79, rely=0.7, anchor=tk.CENTER)
+        
         return frame
 
     def _create_quiz_frame(self):
