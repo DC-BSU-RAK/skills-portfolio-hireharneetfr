@@ -3,6 +3,12 @@ import tkinter.messagebox as msgbox #message boxes
 import random #for random numbers
 from PIL import Image, ImageTk #for importing images 
 
+# PLEASE NOTE ON AI ASSISTANCE:
+# This program was written by me based on the module lecture notes.
+# ChatGPT was only used to help debug small issues (e.g. showing the feedback text label and tweaking widget positions)
+# what was said: "above is tthe code with ss as how the placement is i want the spacing to be nice"
+# or simply a "what is the error"
+
 EASY_RANGE = (1, 9) #choosing the range for the easy level
 MODERATE_RANGE = (10, 99) #choosing the range for moderate level
 ADVANCED_RANGE = (1000, 9999) #choosing the range for advanced level 
