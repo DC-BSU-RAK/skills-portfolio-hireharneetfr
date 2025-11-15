@@ -142,21 +142,21 @@ class MathsQuizApp:
                   padx=6, pady=2).place(relx=0.05, rely=0.08, anchor="w")
 
         tk.Label(frame, textvariable=self.question_text,
-                 bg="#000000", fg="#D42470",
-                 font=("Roboto", 26, "bold")).place(relx=0.5, rely=0.28, anchor="center")
+                 bg="#fff8f3", fg="#D42470",
+                 font=("Roboto", 26, "bold")).place(relx=0.43, rely=0.34, anchor="center")
 
         tk.Entry(frame, textvariable=self.user_answer,
                  width=10, font=("Roboto", 20),
-                 justify="center").place(relx=0.5, rely=0.43, anchor="center")
+                 justify="center").place(relx=0.43, rely=0.47, anchor="center")
 
         tk.Button(frame, text="Submit", command=self._submit_answer,
                   bg="#FF69A6", fg="white", activebackground="#FF8ABA",
                   font=("Roboto", 14, "bold"), relief=tk.FLAT, bd=0,
-                  padx=20, pady=6, cursor="hand2").place(relx=0.5, rely=0.56, anchor="center")
+                  padx=20, pady=6, cursor="hand2").place(relx=0.43, rely=0.61, anchor="center")
 
         tk.Label(frame, textvariable=self.score_text,
-                 bg="#ffffff", fg="#4A145A",
-                 font=("Roboto", 14, "bold")).place(relx=0.5, rely=0.90, anchor="center")
+                 bg="#fff8f3", fg="#2e1940",
+                 font=("Roboto", 14, "bold")).place(relx=0.43, rely=0.73, anchor="center")
 
         return frame
     
