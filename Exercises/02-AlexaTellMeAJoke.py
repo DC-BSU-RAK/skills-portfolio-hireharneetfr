@@ -56,7 +56,7 @@ def wrap_joke(text, max_chars=34):
     if current_line:
         lines.append(current_line)
 
-    return "/n".join(lines)
+    return "\n".join(lines)
 
 question_label = tk.Label(
     root,
@@ -64,7 +64,7 @@ question_label = tk.Label(
     bg="#ebeae8",
     fg="#484848",
     font=("Roboto", 11),
-    wraplength=248
+    wraplength=245
 )
 question_label.place(x=110, y=348)
 
@@ -83,7 +83,7 @@ punchline_label = tk.Label(root,
     bg="#ebeae8",
     fg="#484848",
     font=("Roboto", 11),
-    wraplength=248,
+    wraplength=245,
     justify="left")
 
 quit_label = tk.Label(
@@ -104,8 +104,8 @@ def expand_notification():
     bg_photo = ImageTk.PhotoImage(img)
     bg.config(image=bg_photo)
     question_label.place(x=110, y=360)
-    yes_button.place(x=110, y=430)
-    punchline_label.place(x=110, y=470)
+    yes_button.place(x=110, y=455)
+    punchline_label.place(x=110, y=455)
 
 def show_new_joke(event=None):
     expand_notification()
@@ -127,7 +127,7 @@ def show_punchline(event=None):
 
     yes_button.config(text="Another joke")
     yes_button.bind("<Button-1>", show_new_joke)
-    quit_label.place(x=250, y=400)
+    quit_label.place(x=250, y=455)
 
 yes_button.bind("<Button-1>", show_new_joke)
 
