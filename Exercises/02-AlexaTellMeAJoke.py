@@ -64,7 +64,8 @@ question_label = tk.Label(
     bg="#ebeae8",
     fg="#484848",
     font=("Roboto", 11),
-    wraplength=245
+    wraplength=245,
+    justify="left"
 )
 question_label.place(x=110, y=348)
 
@@ -103,18 +104,18 @@ def expand_notification():
     img = img.resize((430,800))
     bg_photo = ImageTk.PhotoImage(img)
     bg.config(image=bg_photo)
-    question_label.place(x=110, y=360)
-    yes_button.place(x=110, y=455)
-    punchline_label.place(x=110, y=455)
+    question_label.place(x=110, y=348)
+    yes_button.place(x=110, y=430)
+    
 
 def show_new_joke(event=None):
     expand_notification()
     global current_joke
     current_joke = random.choice(jokes)
     setup, _ = current_joke
-    question_label.config(text=setup)
+    question_label.config(text=wrap_joke(setup, max_chars=28))
     punchline_label.config(text="")
-    punchline_label.place(x=110, y=400)
+    punchline_label.place(x=110, y=390)
     quit_label.place_forget()             
     yes_button.config(text="Show punchline")
     yes_button.bind("<Button-1>", show_punchline)
@@ -123,11 +124,11 @@ def show_punchline(event=None):
     if not current_joke:
         return
     _, punch = current_joke
-    punchline_label.config(text=wrap_joke(punch))
+    punchline_label.config(text=wrap_joke(punch, max_chars=28))
 
     yes_button.config(text="Another joke")
     yes_button.bind("<Button-1>", show_new_joke)
-    quit_label.place(x=250, y=455)
+    quit_label.place(x=250, y=430)
 
 yes_button.bind("<Button-1>", show_new_joke)
 
