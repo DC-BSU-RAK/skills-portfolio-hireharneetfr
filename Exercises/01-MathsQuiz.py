@@ -34,7 +34,7 @@ class MathsQuizApp: #class being made
         self.score_text = tk.StringVar(master, value="Score: 0") #displays the score
         self.user_answer = tk.StringVar() #input binding 
         self.feedback_text = tk.StringVar(master, value="") #for feedback text
-
+        self.question_number_text = tk.StringVar(master, value="")
         self.frames = {} #using dictionary of frames
         self.frames["start"] = self._create_start_page() #start page frame
         self.frames["menu"] = self._create_menu_frame() #menu page frame 
@@ -138,6 +138,13 @@ class MathsQuizApp: #class being made
                   bg="#fff", fg="#333", font=("Roboto", 9, "bold"), #button background, text colour
                   relief=tk.FLAT, bd=0, highlightthickness=0, cursor="hand2", # flat button, no border, no highlight border and hand cursor
                   padx=6, pady=2).place(relx=0.05, rely=0.08, anchor="w") #horizontal and veritical padding with placement of button
+        
+        tk.Label(frame,
+            textvariable=self.question_number_text,     #to show the question number
+            bg="#ffc0d2", #its background color
+            fg="#2e1940", #text color
+            font=("Roboto", 18, "bold") #font
+        ).place(relx=0.23, rely=0.18, anchor="w") #placement of the label
 
         tk.Label(frame, textvariable=self.question_text, #the question text is shown
                  bg="#fff8f3", fg="#D42470", #label background and the text colour
@@ -174,7 +181,8 @@ class MathsQuizApp: #class being made
         self.current_question = 0 #resets the question counter
         self.score = 0 #resets the score
         self.score_text.set("Score: 0") #updates the score label 
-        self.user_answer.set("") #clear the old answer 
+        self.user_answer.set("") #clear the old answer
+        self.question_number_text.set("") #clears the question number
 
     def _random_int(self): #gets random number based on difficulty
         if self.difficulty_level == 'easy': #if easy selected
@@ -201,6 +209,7 @@ class MathsQuizApp: #class being made
         else:
             self.current_answer = self.current_num1 - self.current_num2 #calculate answer for -
 
+        self.question_number_text.set(f"Question {self.current_question}") #updates question number
         self.question_text.set(f"{self.current_num1} {self.current_operation} {self.current_num2} = ?") #updates the label to show the question
         self.user_answer.set("") #clears previous input from entry
         self.chances_left = 2  #resets the chances back to 2 for new question

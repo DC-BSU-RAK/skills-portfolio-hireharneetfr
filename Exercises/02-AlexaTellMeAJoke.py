@@ -133,4 +133,3 @@ def show_punchline(event=None):
 yes_button.bind("<Button-1>", show_new_joke)
 
 root.mainloop()
-
