@@ -274,5 +274,9 @@ class MathsQuizApp: #class being made
 
 if __name__ == '__main__': #checks if the file is run directly
     root = tk.Tk() #creates the main window
+    winsound.PlaySound(
+        r"\Resources\images\TUNIC  - Lifeformed.wav",
+        winsound.SND_FILENAME | winsound.SND_LOOP | winsound.SND_ASYNC
+    )
     app = MathsQuizApp(root) #creates an instance of the class
     root.mainloop() #keeps the window open 
