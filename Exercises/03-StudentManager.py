@@ -1,37 +1,62 @@
-import tkinter as tk  
-from tkinter import messagebox 
+import tkinter as tk 
+from PIL import Image, ImageTk 
 
+IMAGE1 = r"Resources\images\StudentManager.png"
+IMAGE2 = r"Resources\images\StudentManager2.png"
 
-STUDENT_FILE = r"Resources\studentMarks.txt"
-
-class StudentManagerApp:  
+class StudentManagerApp:
     def __init__(self, master):
         self.master = master
         self.master.title("03 - Student Manager")
-        self.master.geometry("600x400")
+        self.master.geometry("1000x580")
         self.master.resizable(False, False)
-        self.master.configure(bg="#FCE2E6") 
-        self.students = []
 
-        self.build_main_menu()
+        img1 = Image.open(IMAGE1).resize((1000, 580))
+        img2 = Image.open(IMAGE2).resize((1000, 580))
 
-    def build_main_menu(self):
-        title_label = tk.Label(
-            self.master,
-            text="Student Manager",
-            font=("Roboto", 22, "bold"),
-            bg="#FCE2E6"
+        self.bg_photo1 = ImageTk.PhotoImage(img1)
+        self.bg_photo2 = ImageTk.PhotoImage(img2)
+
+        self.canvas = tk.Canvas(self.master, width=1000, height=580, bd=0, highlightthickness=0)
+        self.canvas.pack(fill="both", expand=True)
+        self.canvas_bg = self.canvas.create_image(0, 0, anchor="nw", image=self.bg_photo1)
+
+        self.menu_items = []
+
+        self.make_menu_item("All student records", 230, 255, self.open_page)
+        self.make_menu_item("Individual student record", 230, 330, self.open_page)
+        self.make_menu_item("Student with highest total score", 230, 400, self.open_page)
+        self.make_menu_item("Student with lowest total score", 230, 460, self.open_page)
+        self.make_menu_item("Sort student records", 520, 255, self.open_page)
+        self.make_menu_item("Add a student record", 520, 330, self.open_page)
+        self.make_menu_item("Delete a student record", 520, 400, self.open_page)
+        self.make_menu_item("Update a student record", 520, 460, self.open_page)
+        
+    def make_menu_item(self, text, x, y, command):
+        item = self.canvas.create_text(
+            x, y, text=text, anchor="w",
+            font=("Georgia", 12, "bold"),
+            fill="#ffffff"
         )
-        title_label.pack(pady=20)
+        self.canvas.tag_bind(item, "<Button-1>", lambda e: command())
+        self.menu_items.append(item)
 
-        info_label = tk.Label(
-            self.master,
-            text="Student Records",
-            font=("Roboto", 10),
-            bg="#FCE2E6"
-        )
-        info_label.pack(pady=5)
+    def open_page(self):
+        self.canvas.itemconfig(self.canvas_bg, image=self.bg_photo2)
 
+        new_positions = [  
+            (70, 130),  
+            (70, 180),  
+            (70, 230),  
+            (70, 280),  
+            (70, 330),  
+            (70, 380),  
+            (70, 430),  
+            (70, 480),  
+        ]
+
+        for item, (x, y) in zip(self.menu_items, new_positions):
+            self.canvas.coords(item, x, y)
 
 if __name__ == "__main__":
     root = tk.Tk()
