@@ -24,8 +24,8 @@ class StudentManagerApp:
 
         self.make_menu_item("All student records", 70, 60, self.show_all_records)
         self.make_menu_item("Individual student record", 70, 130, self.update_record)
-        self.make_menu_item("Student with highest total score", 70, 200, self.update_record)
-        self.make_menu_item("Student with lowest total score", 70, 260, self.update_record)
+        self.make_menu_item("Student with highest total score", 70, 200, self.show_highest)
+        self.make_menu_item("Student with lowest total score", 70, 260, self.show_lowest)
         self.make_menu_item("Sort student records", 70, 320, self.update_record)
         self.make_menu_item("Add a student record", 70, 380, self.update_record)
         self.make_menu_item("Delete a student record", 70, 450, self.update_record)
@@ -114,10 +114,60 @@ class StudentManagerApp:
                                      anchor="w", font=("Georgia", 12, "bold"),
                                      fill="white")
         self.data_items.extend([s1, s2])
-
+    
     def show_individual(self): pass
-    def show_highest(self): pass
-    def show_lowest(self): pass
+    
+    def show_highest(self):  
+        self.clear_data()
+        
+        top = max(self.students, key=lambda s: s[4])
+        x = 360
+        y = 180
+        
+        header = "Name                Number   CW   Exam   %     Grade"
+        h = self.canvas.create_text(x, y, text=header, anchor="w",
+                                font=("Courier New", 12, "bold"), fill="white")
+        self.data_items.append(h)
+        y += 30
+        info = f"{top[1]:20} {top[0]:7}  {top[2]:3}   {top[3]:4}   {top[4]:6.2f}   {top[5]}"
+        line = self.canvas.create_text(x, y, text=info, anchor="w",
+                                   font=("Courier New", 11), fill="white")
+        self.data_items.append(line)
+        
+        txt = self.canvas.create_text(
+            x, y - 65,
+        text="Highest overall scoring student",
+        anchor="w",
+        font=("Georgia", 13, "bold"),
+        fill="white"
+        )
+        
+        self.data_items.append(txt)
+
+    def show_lowest(self):  #ichangedthistothat
+        self.clear_data()
+        low = min(self.students, key=lambda s: s[4])
+        x = 360
+        y = 180
+        
+        header = "Name                Number   CW   Exam   %     Grade"
+        h = self.canvas.create_text(x, y, text=header, anchor="w",
+                                font=("Courier New", 12, "bold"), fill="white")
+        self.data_items.append(h)
+        y += 30
+        info = f"{low[1]:20} {low[0]:7}  {low[2]:3}   {low[3]:4}   {low[4]:6.2f}   {low[5]}"
+        line = self.canvas.create_text(x, y, text=info, anchor="w",
+                                   font=("Courier New", 11), fill="white")
+        self.data_items.append(line)
+        txt = self.canvas.create_text(
+        x, y - 65,
+        text="Lowest overall scoring student",
+        anchor="w",
+        font=("Georgia", 13, "bold"),
+        fill="white"
+        )
+        self.data_items.append(txt)
+
     def sort_records(self): pass
     def add_record(self): pass
     def delete_record(self): pass
