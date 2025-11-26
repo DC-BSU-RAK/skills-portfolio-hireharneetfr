@@ -1,6 +1,11 @@
 import tkinter as tk #importing tkinter
 from PIL import Image, ImageTk #to import images
 import random #choosing random jokes
+# PLEASE NOTE ON AI ASSISTANCE:
+
+# This program was written by me based on the module lecture notes.
+# ChatGPT was only used to help debug small issues or help fix errors
+# what was said: "what is the error"
 
 BG_IMAGE = r"Resources\images\PHONE.png" #small notification image
 BG2_IMAGE = r"Resources\images\PHONE2.png" #a little bigger notification image

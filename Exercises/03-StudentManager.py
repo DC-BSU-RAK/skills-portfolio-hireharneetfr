@@ -1,5 +1,10 @@
 import tkinter as tk 
-from PIL import Image, ImageTk 
+from PIL import Image, ImageTk
+
+# PLEASE NOTE ON AI ASSISTANCE:
+# This program was written by me based on the module lecture notes.
+# ChatGPT was only used to help debug small issues or help fix errors
+# what was said: "what is the error"
 
 IMAGE2 = r"Resources\images\StudentManager2.png"
 MARKS = r"Resources\studentMarks.txt"
@@ -26,18 +31,19 @@ class StudentManagerApp:
         self.entry_widgets = []
         self.search_var = tk.StringVar() 
 
-        self.make_menu_item("All student records", 70, 60, self.show_all_records)
-        self.make_menu_item("Individual student record", 70, 130, self.show_individual)
-        self.make_menu_item("Student with highest total score", 70, 200, self.show_highest)
-        self.make_menu_item("Student with lowest total score", 70, 260, self.show_lowest)
-        self.make_menu_item("Sort student records", 70, 320, self.sort_records)
-        self.make_menu_item("Add a student record", 70, 380, self.add_record)
-        self.make_menu_item("Delete a student record", 70, 450, self.delete_record)
-        self.make_menu_item("Update a student record", 70, 520, self.update_record)
-        
+        self.make_menu_item("All student records", 170, 60, self.show_all_records)
+        self.make_menu_item("Individual student record", 170, 128, self.show_individual)
+        self.make_menu_item("Student with highest total score", 170, 196, self.show_highest)
+        self.make_menu_item("Student with lowest total score", 170, 261, self.show_lowest)
+        self.make_menu_item("Sort student records", 170, 318, self.sort_records)
+        self.make_menu_item("Add a student record", 170, 383, self.add_record)
+        self.make_menu_item("Delete a student record", 170, 452, self.delete_record)
+        self.make_menu_item("Update a student record", 170, 520, self.update_record)
+
+
     def make_menu_item(self, text, x, y, command):
         item = self.canvas.create_text(
-            x, y, text=text, anchor="w",
+            x, y, text=text, anchor="center",
             font=("Georgia", 12, "bold"),
             fill="#ffffff"
         )
@@ -487,10 +493,268 @@ class StudentManagerApp:
 #DELTE RECORDDD
     
     def delete_record(self):
-        pass  
+        self.clear_data()
+        self.clear_sort_buttons()
+
+        x = 360
+        y = 180
+
+        t = self.canvas.create_text(
+            x, y - 40,
+            text="Delete a Student Record",
+            anchor="w",
+            font=("Georgia", 13, "bold"),
+            fill="white"
+        )
+        self.data_items.append(t)
+
+        lbl = self.canvas.create_text(
+            x, y,
+            text="Enter Student Name or ID:",
+            anchor="w",
+            font=("Georgia", 11, "bold"),
+            fill="white"
+        )
+        self.data_items.append(lbl)
+
+        delete_var = tk.StringVar()
+        entry = tk.Entry(
+            self.master,
+            textvariable=delete_var,
+            font=("Courier New", 11),
+            width=30,
+            bg="#333333",
+            fg="white",
+            insertbackground="white"
+        )
+        entry.place(x=x + 220, y=y - 12)
+        self.entry_widgets.append(entry)
+
+        def perform_delete():
+            query = delete_var.get().strip().lower()
+            found = None
+            for s in self.students:
+                if query in s[0].lower() or query in s[1].lower():
+                    found = s
+                    break
+
+            if found:
+                self.students.remove(found)
+
+                with open(MARKS, "r") as f:
+                    lines = f.readlines()
+
+                with open(MARKS, "w") as f:
+                    for line in lines:
+                        if not (found[0] in line or found[1].lower() in line.lower()):
+                            f.write(line)
+
+                msg = self.canvas.create_text(
+                    x, y + 90,
+                    text="Record deleted successfully.",
+                    anchor="w",
+                    font=("Georgia", 12, "bold"),
+                    fill="white"
+                )
+                self.data_items.append(msg)
+            else:
+                msg = self.canvas.create_text(
+                    x, y + 80,
+                    text="No matching student found.",
+                    anchor="w",
+                    font=("Georgia", 12, "bold"),
+                    fill="white"
+                )
+                self.data_items.append(msg)
+
+        btn = tk.Button(
+            self.master,
+            text="Delete Record",
+            command=perform_delete,
+            bg="#f296aa",
+            fg="white",
+            font=("Georgia", 11, "bold"),
+            relief="flat",
+            border=0,
+            highlightthickness=0,
+            padx=10,
+            pady=5
+        )
+        btn.place(x=x + 220, y=y + 40)
+        self.other_widgets.append(btn)
+
+        entry.bind("<Return>", lambda ev: perform_delete())
+
+#update recorddd
 
     def update_record(self):
-        pass
+        self.clear_data()
+        self.clear_sort_buttons()
+
+        x = 360
+        y = 180
+
+        title = self.canvas.create_text(
+            x, y - 40,
+            text="Update a Student Record",
+            anchor="w",
+            font=("Georgia", 13, "bold"),
+            fill="white"
+        )
+        self.data_items.append(title)
+
+        search_var = tk.StringVar()
+
+        lbl = self.canvas.create_text(
+            x, y,
+            text="Enter Student Name or ID:",
+            anchor="w",
+            font=("Georgia", 11, "bold"),
+            fill="white"
+        )
+        self.data_items.append(lbl)
+
+        entry = tk.Entry(
+            self.master,
+            textvariable=search_var,
+            font=("Courier New", 11),
+            width=30,
+            bg="#333333",
+            fg="white",
+            insertbackground="white"
+        )
+        entry.place(x=x + 220, y=y - 12)
+        self.entry_widgets.append(entry)
+
+        form_vars = []
+
+        def load_edit_fields(s):
+            labels = ["Name:", "Coursework 1:", "Coursework 2:", "Coursework 3:", "Exam:"]
+            values = [s[1], "", "", "", ""]
+
+            for i, text in enumerate(labels):
+                lbl2 = self.canvas.create_text(
+                    x, y + 60 + (i * 40),
+                    text=text,
+                    anchor="w",
+                    font=("Georgia", 11, "bold"),
+                    fill="white"
+                )
+                self.data_items.append(lbl2)
+
+                v = tk.StringVar()
+                if i == 0:
+                    v.set(s[1])
+                form_vars.append(v)
+
+                e = tk.Entry(
+                    self.master,
+                    textvariable=v,
+                    font=("Courier New", 11),
+                    width=25,
+                    bg="#333333",
+                    fg="white",
+                    insertbackground="white"
+                )
+                e.place(x=x + 200, y=y + 48 + (i * 40))
+                self.entry_widgets.append(e)
+
+            def apply_update():
+                new_name = form_vars[0].get().strip()
+                c1 = int(form_vars[1].get().strip() or s[2] - (s[3] + s[4] if False else 0))
+                c2 = int(form_vars[2].get().strip() or 0)
+                c3 = int(form_vars[3].get().strip() or 0)
+                exam = int(form_vars[4].get().strip() or s[3])
+
+                cw_total = c1 + c2 + c3
+                percent = ((cw_total + exam) / 160) * 100
+
+                if percent >= 70:
+                    grade = "A"
+                elif percent >= 60:
+                    grade = "B"
+                elif percent >= 50:
+                    grade = "C"
+                elif percent >= 40:
+                    grade = "D"
+                else:
+                    grade = "F"
+
+                s[1] = new_name
+                s[2] = cw_total
+                s[3] = exam
+                s[4] = percent
+                s[5] = grade
+
+                with open(MARKS, "r") as f:
+                    lines = f.readlines()
+
+                with open(MARKS, "w") as f:
+                    for line in lines:
+                        if s[0] in line:
+                            f.write(f"{s[0]},{new_name},{c1},{c2},{c3},{exam}\n")
+                        else:
+                            f.write(line)
+
+                msg = self.canvas.create_text(
+                    x, y + 300,
+                    text="Record updated successfully!",
+                    anchor="w",
+                    font=("Georgia", 12, "bold"),
+                    fill="white"
+                )
+                self.data_items.append(msg)
+
+            btn2 = tk.Button(
+                self.master,
+                text="Save Changes",
+                command=apply_update,
+                bg="#f296aa",
+                fg="white",
+                font=("Georgia", 11, "bold"),
+                relief="flat",
+                border=0,
+                highlightthickness=0,
+                padx=10,
+                pady=5
+            )
+            btn2.place(x=x + 200, y=y + 250)
+            self.other_widgets.append(btn2)
+
+        def search_student():
+            q = search_var.get().strip().lower()
+            for s in self.students:
+                if q in s[0].lower() or q in s[1].lower():
+                    load_edit_fields(s)
+                    return
+
+            msg = self.canvas.create_text(
+                x, y + 60,
+                text="No matching student found.",
+                anchor="w",
+                font=("Georgia", 12, "bold"),
+                fill="white"
+            )
+            self.data_items.append(msg)
+
+        search_btn = tk.Button(
+            self.master,
+            text="Search",
+            command=search_student,
+            bg="#f296aa",
+            fg="white",
+            font=("Georgia", 9, "bold"),
+            relief="flat",
+            border=0,
+            highlightthickness=0,
+            padx=6,
+            pady=2
+        )
+        search_btn.place(x=x + 470, y=y - 12)
+        self.other_widgets.append(search_btn)
+
+        entry.bind("<Return>", lambda ev: search_student())
+
 
 if __name__ == "__main__":
     root = tk.Tk()
