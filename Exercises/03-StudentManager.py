@@ -20,13 +20,15 @@ class StudentManagerApp:
 
         self.menu_items = []
         self.data_items = []         
-        self.students = self.load_students()  
+        self.students = self.load_students()
 
+        self.sort_buttons = []
+        
         self.make_menu_item("All student records", 70, 60, self.show_all_records)
         self.make_menu_item("Individual student record", 70, 130, self.update_record)
         self.make_menu_item("Student with highest total score", 70, 200, self.show_highest)
         self.make_menu_item("Student with lowest total score", 70, 260, self.show_lowest)
-        self.make_menu_item("Sort student records", 70, 320, self.update_record)
+        self.make_menu_item("Sort student records", 70, 320, self.sort_records)
         self.make_menu_item("Add a student record", 70, 380, self.update_record)
         self.make_menu_item("Delete a student record", 70, 450, self.update_record)
         self.make_menu_item("Update a student record", 70, 520, self.update_record)
@@ -76,9 +78,15 @@ class StudentManagerApp:
         for item in self.data_items:
             self.canvas.delete(item)
         self.data_items = []
-        
+    
+    def clear_sort_buttons(self):
+        for btn in self.sort_buttons:
+            btn.destroy()
+        self.sort_buttons = []
+
     def show_all_records(self):     
         self.clear_data()
+        self.clear_sort_buttons() 
 
         students = self.students
 
@@ -115,11 +123,15 @@ class StudentManagerApp:
                                      fill="white")
         self.data_items.extend([s1, s2])
     
-    def show_individual(self): pass
+    def show_individual(self):
+        self.clear_data()
+        self.clear_sort_buttons()   # optional but consistent
+        pass
     
     def show_highest(self):  
         self.clear_data()
-        
+        self.clear_sort_buttons()
+
         top = max(self.students, key=lambda s: s[4])
         x = 360
         y = 180
@@ -144,8 +156,9 @@ class StudentManagerApp:
         
         self.data_items.append(txt)
 
-    def show_lowest(self):  #ichangedthistothat
+    def show_lowest(self):  
         self.clear_data()
+        self.clear_sort_buttons()
         low = min(self.students, key=lambda s: s[4])
         x = 360
         y = 180
@@ -168,12 +181,92 @@ class StudentManagerApp:
         )
         self.data_items.append(txt)
 
-    def sort_records(self): pass
-    def add_record(self): pass
-    def delete_record(self): pass
-    def update_record(self): pass
-    
+    def sort_records(self): 
+        self.clear_data()
+        self.clear_sort_buttons()   
+
+        for w in self.master.place_slaves():
+            w.destroy()
+
+        label = self.canvas.create_text(
+            360, 150,
+            text="Sort by overall percentage:",
+            anchor="w",
+            font=("Georgia", 14, "bold"),
+            fill="white"
+        )
+        self.data_items.append(label)
+
+        def show_sorted(order): 
+            self.clear_data()
+
+            if order == "asc":
+                sorted_students = sorted(self.students, key=lambda s: s[4])
+            else:
+                sorted_students = sorted(self.students, key=lambda s: s[4], reverse=True)
+
+            x = 360
+            y = 180
+            gap = 26
+
+            header = "Name                Number   CW   Exam   %     Grade"
+            h = self.canvas.create_text(
+                x, y,
+                text=header,
+                anchor="w",
+                font=("Courier New", 12, "bold"),
+                fill="white"
+            )
+            self.data_items.append(h)
+
+            y += gap
+
+            for s in sorted_students:
+                row = f"{s[1]:20} {s[0]:7}  {s[2]:3}   {s[3]:4}   {s[4]:6.2f}   {s[5]}"
+                item = self.canvas.create_text(
+                    x, y,
+                    text=row,
+                    anchor="w",
+                    font=("Courier New", 11),
+                    fill="white"
+                )
+                self.data_items.append(item)
+                y += gap
+
+        asc_btn = tk.Button(
+            self.master,
+            text="Ascending",
+            command=lambda: show_sorted("asc"),
+            bg= "#f296aa",
+            fg="white",
+            font=("Georgia", 11, "bold"),
+            relief="flat",
+            border=0,
+            highlightthickness=0
+        )
+        asc_btn.place(x=730, y=140)
+        self.sort_buttons.append(asc_btn)
+        
+        desc_btn = tk.Button(
+            self.master,
+            text="Descending",
+            command=lambda: show_sorted("desc"),
+            bg= "#f296aa",
+            fg="white",
+            font=("Georgia", 11, "bold"),
+            relief="flat",
+            border=0,
+            highlightthickness=0
+        )
+        desc_btn.place(x=830, y=140)
+        self.sort_buttons.append(desc_btn)
+
+    def add_record(self): pass  
+    def delete_record(self): pass  
+    def update_record(self): pass  
+
+
 if __name__ == "__main__":
     root = tk.Tk()
     app = StudentManagerApp(root)
-    root.mainloop()
+    root.mainloop() 
