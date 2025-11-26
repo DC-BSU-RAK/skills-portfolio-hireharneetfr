@@ -21,16 +21,18 @@ class StudentManagerApp:
         self.menu_items = []
         self.data_items = []         
         self.students = self.load_students()
-
         self.sort_buttons = []
-        
+        self.other_widgets = []     
+        self.entry_widgets = []
+        self.search_var = tk.StringVar() 
+
         self.make_menu_item("All student records", 70, 60, self.show_all_records)
-        self.make_menu_item("Individual student record", 70, 130, self.update_record)
+        self.make_menu_item("Individual student record", 70, 130, self.show_individual)
         self.make_menu_item("Student with highest total score", 70, 200, self.show_highest)
         self.make_menu_item("Student with lowest total score", 70, 260, self.show_lowest)
         self.make_menu_item("Sort student records", 70, 320, self.sort_records)
-        self.make_menu_item("Add a student record", 70, 380, self.update_record)
-        self.make_menu_item("Delete a student record", 70, 450, self.update_record)
+        self.make_menu_item("Add a student record", 70, 380, self.add_record)
+        self.make_menu_item("Delete a student record", 70, 450, self.delete_record)
         self.make_menu_item("Update a student record", 70, 520, self.update_record)
         
     def make_menu_item(self, text, x, y, command):
@@ -74,20 +76,36 @@ class StudentManagerApp:
 
         return students
     
-    def clear_data(self): 
+    def clear_data(self):
         for item in self.data_items:
             self.canvas.delete(item)
         self.data_items = []
-    
+
+        for w in self.entry_widgets:
+            w.destroy()
+        self.entry_widgets = []
+
+        for w in self.other_widgets:
+            w.destroy()
+        self.other_widgets = []
+
     def clear_sort_buttons(self):
         for btn in self.sort_buttons:
             btn.destroy()
         self.sort_buttons = []
 
-    def show_all_records(self):     
-        self.clear_data()
-        self.clear_sort_buttons() 
+        for w in self.entry_widgets:
+            w.destroy()
+        self.entry_widgets = []
 
+        for w in self.master.place_slaves():    
+            w.destroy()
+
+#SHOW ALL RECORDSSS
+
+    def show_all_records(self):  
+        self.clear_data()
+        self.clear_sort_buttons()    
         students = self.students
 
         x = 360
@@ -122,12 +140,96 @@ class StudentManagerApp:
                                      anchor="w", font=("Georgia", 12, "bold"),
                                      fill="white")
         self.data_items.extend([s1, s2])
-    
+
+#show individuallllllllllll
+
     def show_individual(self):
         self.clear_data()
-        self.clear_sort_buttons()   # optional but consistent
-        pass
-    
+        self.clear_sort_buttons()
+        x = 360
+        y = 120
+        t = self.canvas.create_text(
+            x, y - 30,
+            text="View Individual Student Record",
+            anchor="w",
+            font=("Georgia", 13, "bold"),
+            fill="white"
+            )
+        self.data_items.append(t)
+        l = self.canvas.create_text(
+            x, y,
+            text="Enter Student Name or ID:",
+            anchor="w",
+            font=("Georgia", 11, "bold"),
+            fill="white"
+            )
+        self.data_items.append(l)
+        
+        e = tk.Entry(
+            self.master,
+            textvariable=self.search_var,
+            font=("Courier New", 11),
+            width=30,
+            bg="#333333",
+            fg="white",
+            insertbackground="white"
+            )
+        e.place(x=x + 220, y=y - 12)
+        self.entry_widgets.append(e)
+        
+        b = tk.Button(
+            self.master,
+            text="Search",
+            command=self.search_and_display_record,
+            bg="#f296aa",
+            fg="white",
+            font=("Georgia", 10, "bold"),
+            relief="flat",
+            border=0,
+            highlightthickness=0
+            )
+        b.place(x=x + 470, y=y - 12)
+        self.other_widgets.append(b)
+        e.bind("<Return>", lambda ev: self.search_and_display_record())
+
+    def search_and_display_record(self):
+        query = self.search_var.get().strip().lower()
+        self.clear_data()
+        self.clear_sort_buttons()
+        x = 360
+        y = 180
+        h = self.canvas.create_text(
+            x, y,
+            text="Name                Number   CW   Exam   %     Grade",
+            anchor="w",
+            font=("Courier New", 12, "bold"),
+            fill="white"
+            )
+        self.data_items.append(h)
+        y += 30
+        for s in self.students:
+            if query in s[0].lower() or query in s[1].lower():
+                row = f"{s[1]:20} {s[0]:7}  {s[2]:3}   {s[3]:4}   {s[4]:6.2f}   {s[5]}"
+                r = self.canvas.create_text(
+                    x, y,
+                    text=row,
+                    anchor="w",
+                    font=("Courier New", 11),
+                    fill="white"
+                    )
+                self.data_items.append(r)
+                return
+            nf = self.canvas.create_text(
+                x, y,
+                text="No matching student found.",
+                anchor="w",
+                font=("Georgia", 12, "bold"),
+                fill="white"
+                )
+            self.data_items.append(nf)
+
+# SHOW HIGHESTTTTTTTTTTTTT
+
     def show_highest(self):  
         self.clear_data()
         self.clear_sort_buttons()
@@ -155,6 +257,7 @@ class StudentManagerApp:
         )
         
         self.data_items.append(txt)
+# SHOW LOWESTTTTTTTTTTTTTTT
 
     def show_lowest(self):  
         self.clear_data()
@@ -180,6 +283,8 @@ class StudentManagerApp:
         fill="white"
         )
         self.data_items.append(txt)
+
+#SORT RECORDDDDDDDDDDDDDDDDDD
 
     def sort_records(self): 
         self.clear_data()
@@ -261,10 +366,15 @@ class StudentManagerApp:
         desc_btn.place(x=830, y=140)
         self.sort_buttons.append(desc_btn)
 
-    def add_record(self): pass  
-    def delete_record(self): pass  
-    def update_record(self): pass  
 
+    def add_record(self):
+        pass
+    
+    def delete_record(self):
+        pass  
+
+    def update_record(self):
+        pass
 
 if __name__ == "__main__":
     root = tk.Tk()
