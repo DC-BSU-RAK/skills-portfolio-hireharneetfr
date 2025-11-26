@@ -384,9 +384,107 @@ class StudentManagerApp:
         desc_btn.place(x=830, y=140)
         self.sort_buttons.append(desc_btn)
 
+#ADDD RECORDDDDDDDDDDDDDDDD 
 
     def add_record(self):
-        pass
+        self.clear_data()
+        self.clear_sort_buttons()
+
+        x = 360
+        y = 180
+
+        title = self.canvas.create_text(
+            x, y - 40,
+            text="Add a New Student Record",
+            anchor="w",
+            font=("Georgia", 13, "bold"),
+            fill="white"
+        )
+        self.data_items.append(title)
+
+        labels = ["Student ID:", "Name:", "Coursework 1:", "Coursework 2:", "Coursework 3:", "Exam:"]
+        vars_list = []
+
+        for i, text in enumerate(labels):
+            lbl = self.canvas.create_text(
+                x, y + (i * 40),
+                text=text,
+                anchor="w",
+                font=("Georgia", 11, "bold"),
+                fill="white"
+            )
+            self.data_items.append(lbl)
+
+            v = tk.StringVar()
+            entry = tk.Entry(
+                self.master,
+                textvariable=v,
+                font=("Courier New", 11),
+                width=25,
+                bg="#333333",
+                fg="white",
+                insertbackground="white"
+            )
+            entry.place(x=x + 200, y=y - 12 + (i * 40))
+            self.entry_widgets.append(entry)
+            vars_list.append(v)
+
+        def save_record():
+            sid = vars_list[0].get().strip()
+            name = vars_list[1].get().strip()
+            c1 = int(vars_list[2].get().strip())
+            c2 = int(vars_list[3].get().strip())
+            c3 = int(vars_list[4].get().strip())
+            exam = int(vars_list[5].get().strip())
+
+            cw_total = c1 + c2 + c3
+            percent = ((cw_total + exam) / 160) * 100
+
+            if percent >= 70:
+                grade = "A"
+            elif percent >= 60:
+                grade = "B"
+            elif percent >= 50:
+                grade = "C"
+            elif percent >= 40:
+                grade = "D"
+            else:
+                grade = "F"
+
+            self.students.append([sid, name, cw_total, exam, percent, grade])
+
+            with open(MARKS, "a") as f:
+                f.write(f"\n{sid},{name},{c1},{c2},{c3},{exam}")
+
+            msg = self.canvas.create_text(
+                x, y + 280,
+                text="Record added successfully!",
+                anchor="w",
+                font=("Georgia", 12, "bold"),
+                fill="white"
+            )
+            self.data_items.append(msg)
+
+        btn = tk.Button(
+            self.master,
+            text="Add Record",
+            command=save_record,
+            bg="#f296aa",     
+            fg="white",
+            font=("Georgia", 11, "bold"),
+            relief="flat",
+            activebackground="#f296aa",
+            activeforeground="white",
+            border=0,
+            highlightthickness=0,
+            padx=10,
+            pady=5
+        )
+
+        btn.place(x=x + 200, y=y + 240)
+        self.other_widgets.append(btn)
+
+#DELTE RECORDDD
     
     def delete_record(self):
         pass  
