@@ -111,6 +111,15 @@ class StudentManagerApp:
         x = 360
         y = 180
         gap = 26
+        
+        t = self.canvas.create_text(
+            x, y - 30,
+            text="All Student Records",
+            anchor="w",
+            font=("Georgia", 13, "bold"),
+            fill="white"
+            )
+        self.data_items.append(t)
 
         header = "Name                Number   CW   Exam   %     Grade"
         h = self.canvas.create_text(x, y, text=header, anchor="w",
@@ -147,7 +156,7 @@ class StudentManagerApp:
         self.clear_data()
         self.clear_sort_buttons()
         x = 360
-        y = 120
+        y = 180
         t = self.canvas.create_text(
             x, y - 30,
             text="View Individual Student Record",
@@ -192,21 +201,27 @@ class StudentManagerApp:
         self.other_widgets.append(b)
         e.bind("<Return>", lambda ev: self.search_and_display_record())
 
+
     def search_and_display_record(self):
         query = self.search_var.get().strip().lower()
         self.clear_data()
         self.clear_sort_buttons()
+
         x = 360
         y = 180
+
         h = self.canvas.create_text(
             x, y,
             text="Name                Number   CW   Exam   %     Grade",
             anchor="w",
             font=("Courier New", 12, "bold"),
             fill="white"
-            )
+        )
         self.data_items.append(h)
         y += 30
+
+        found = False
+
         for s in self.students:
             if query in s[0].lower() or query in s[1].lower():
                 row = f"{s[1]:20} {s[0]:7}  {s[2]:3}   {s[3]:4}   {s[4]:6.2f}   {s[5]}"
@@ -216,16 +231,19 @@ class StudentManagerApp:
                     anchor="w",
                     font=("Courier New", 11),
                     fill="white"
-                    )
+                )
                 self.data_items.append(r)
-                return
+                found = True
+                break
+
+        if not found:
             nf = self.canvas.create_text(
                 x, y,
                 text="No matching student found.",
                 anchor="w",
                 font=("Georgia", 12, "bold"),
                 fill="white"
-                )
+            )
             self.data_items.append(nf)
 
 # SHOW HIGHESTTTTTTTTTTTTT
